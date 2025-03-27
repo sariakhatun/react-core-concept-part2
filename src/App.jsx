@@ -1,11 +1,24 @@
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 import Counter from './counter'
 import Batsman from './player'
+import Users from './user'
+import Friends from './friends'
+import Posts from './post'
 
+let fetchUser = fetch('https://jsonplaceholder.typicode.com/users').then(res => res.json())
+let fetchFriends = async() =>{
+  let res = await fetch('https://jsonplaceholder.typicode.com/users')
+  return res.json();
+
+}
+let fetchPost = fetch('https://jsonplaceholder.typicode.com/posts').then(res => res.json())
 function App() {
+
+  let friendPromise = fetchFriends()
+
   function handleClick(){
     alert("I am clicked")
   }
@@ -20,6 +33,16 @@ function App() {
     <>
       
       <h1>Vite + React</h1>
+      <Suspense fallback={<h3>Post are coming</h3>}>
+        <Posts fetchPost={fetchPost}></Posts>
+      </Suspense>
+      {/* <Suspense fallback={<h3>Loading...</h3>}>
+      <Users fetchUser={fetchUser}></Users>
+      </Suspense> */}
+      {/* <Suspense fallback={<h3>Friends are coming for treat....</h3>}>
+    <Friends friendPromise = {friendPromise}></Friends>
+      </Suspense> */}
+     
     <Batsman></Batsman>
     <Counter></Counter>
 
